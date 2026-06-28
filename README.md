@@ -2,7 +2,7 @@
 
 A high-performance, full-stack task management application built with the **MERN** stack. This project features "Framer-like" smooth animations, a modern **Tailwind CSS v4** design system, and a robust **JWT-based** authentication system.
 
-### 🔗 [Live Demo (Vercel)](https://your-vercel-link.vercel.app) | 🖥️ [Backend API (Render)](https://your-render-link.onrender.com)
+### 🔗 [Live Demo (Vercel)](https://task-tracker-navy-iota.vercel.app/) | 🖥️ [Backend API (Render)](https://task-tracker-of3a.onrender.com)
 
 ---
 
