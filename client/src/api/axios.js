@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API = axios.create({
   // Update this URL when you deploy to Render
-  baseURL: 'https://task-tracker-of3a.onrender.com/api' ,
+  baseURL: import.meta.env.VITE_API_URL ,
 });
 
 // Automatically add the token to headers for every request
