@@ -21,7 +21,6 @@ const AuthForm = ({ isLogin, setUser }) => {
                 : formData;
 
             const { data } = await API.post(endpoint, payload);
-            const { data } = await API.post(endpoint, formData);
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             setUser(data);
