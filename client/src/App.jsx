@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import AuthForm from './features/AuthForm';
 import TaskList from './features/TaskList';
 
-// Animation settings
+// Smooth fade + slight slide variants
 const pageVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
+  initial: { opacity: 0, x: 10 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -10 },
 };
 
 const Dashboard = ({ user, setUser }) => {
@@ -45,55 +45,33 @@ const AnimatedRoutes = ({ user, setUser }) => {
   const location = useLocation();
 
   return (
-    // The 'page-stack' class is the magic fix for the "pushing down" issue
+    // 'page-stack' ensures exiting and entering pages overlap perfectly
     <div className="page-stack min-h-screen w-full bg-slate-50 overflow-hidden">
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="sync">
         <Routes location={location} key={location.pathname}>
           
           <Route path="/login" element={
-            !user ? (
-              <motion.div 
-                variants={pageVariants} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit"
-                transition={{ duration: 0.3 }}
-              >
-                <div className="min-h-screen flex items-center justify-center p-4">
-                  <AuthForm isLogin={true} setUser={setUser} />
-                </div>
-              </motion.div>
-            ) : <Navigate to="/dashboard" replace />
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
+              <div className="min-h-screen flex items-center justify-center p-4">
+                {/* Redirect to dashboard if user is already logged in */}
+                {user ? <Navigate to="/dashboard" replace /> : <AuthForm isLogin={true} setUser={setUser} />}
+              </div>
+            </motion.div>
           } />
 
           <Route path="/signup" element={
-            !user ? (
-              <motion.div 
-                variants={pageVariants} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit"
-                transition={{ duration: 0.3 }}
-              >
-                <div className="min-h-screen flex items-center justify-center p-4">
-                  <AuthForm isLogin={false} setUser={setUser} />
-                </div>
-              </motion.div>
-            ) : <Navigate to="/dashboard" replace />
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
+              <div className="min-h-screen flex items-center justify-center p-4">
+                {user ? <Navigate to="/dashboard" replace /> : <AuthForm isLogin={false} setUser={setUser} />}
+              </div>
+            </motion.div>
           } />
 
           <Route path="/dashboard" element={
-            user ? (
-              <motion.div 
-                variants={pageVariants} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit"
-                transition={{ duration: 0.3 }}
-              >
-                <Dashboard user={user} setUser={setUser} />
-              </motion.div>
-            ) : <Navigate to="/login" replace />
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
+              {/* If user logs out, they stay here long enough to animate out, then redirect */}
+              {user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/login" replace />}
+            </motion.div>
           } />
 
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -106,7 +84,11 @@ const AnimatedRoutes = ({ user, setUser }) => {
 export default function App() {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('userInfo');
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+      return null;
+    }
   });
 
   return (
