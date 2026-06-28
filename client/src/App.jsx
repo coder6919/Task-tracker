@@ -45,7 +45,6 @@ const AnimatedRoutes = ({ user, setUser }) => {
   const location = useLocation();
 
   return (
-    // 'page-stack' ensures exiting and entering pages overlap perfectly
     <div className="page-stack min-h-screen w-full bg-slate-50 overflow-hidden">
       <AnimatePresence mode="sync">
         <Routes location={location} key={location.pathname}>
@@ -53,7 +52,6 @@ const AnimatedRoutes = ({ user, setUser }) => {
           <Route path="/login" element={
             <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
               <div className="min-h-screen flex items-center justify-center p-4">
-                {/* Redirect to dashboard if user is already logged in */}
                 {user ? <Navigate to="/dashboard" replace /> : <AuthForm isLogin={true} setUser={setUser} />}
               </div>
             </motion.div>
@@ -69,7 +67,6 @@ const AnimatedRoutes = ({ user, setUser }) => {
 
           <Route path="/dashboard" element={
             <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
-              {/* If user logs out, they stay here long enough to animate out, then redirect */}
               {user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/login" replace />}
             </motion.div>
           } />

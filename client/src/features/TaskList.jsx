@@ -6,7 +6,7 @@ import TaskItem from './TaskItem';
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState('all'); // 'all', 'pending', 'completed'
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     fetchTasks();
