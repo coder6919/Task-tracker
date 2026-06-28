@@ -17,3 +17,15 @@ body {
 .shadow-xl {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
 }
+
+.page-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.page-stack > * {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+}

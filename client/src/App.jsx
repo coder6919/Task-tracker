@@ -5,10 +5,10 @@ import AuthForm from './features/AuthForm';
 import TaskList from './features/TaskList';
 
 // Animation settings
-const variants = {
-  initial: { opacity: 0, y: 20 },
+const pageVariants = {
+  initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
+  exit: { opacity: 0, y: -10 },
 };
 
 const Dashboard = ({ user, setUser }) => {
@@ -45,15 +45,21 @@ const AnimatedRoutes = ({ user, setUser }) => {
   const location = useLocation();
 
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* popLayout prevents the 'pushing down' effect during transitions */}
-      <AnimatePresence mode="popLayout" initial={false}>
+    // The 'page-stack' class is the magic fix for the "pushing down" issue
+    <div className="page-stack min-h-screen w-full bg-slate-50 overflow-hidden">
+      <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           
           <Route path="/login" element={
             !user ? (
-              <motion.div key="login" variants={variants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
-                <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+              <motion.div 
+                variants={pageVariants} 
+                initial="initial" 
+                animate="animate" 
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                <div className="min-h-screen flex items-center justify-center p-4">
                   <AuthForm isLogin={true} setUser={setUser} />
                 </div>
               </motion.div>
@@ -62,8 +68,14 @@ const AnimatedRoutes = ({ user, setUser }) => {
 
           <Route path="/signup" element={
             !user ? (
-              <motion.div key="signup" variants={variants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
-                <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+              <motion.div 
+                variants={pageVariants} 
+                initial="initial" 
+                animate="animate" 
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                <div className="min-h-screen flex items-center justify-center p-4">
                   <AuthForm isLogin={false} setUser={setUser} />
                 </div>
               </motion.div>
@@ -72,7 +84,13 @@ const AnimatedRoutes = ({ user, setUser }) => {
 
           <Route path="/dashboard" element={
             user ? (
-              <motion.div key="dashboard" variants={variants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.3 }}>
+              <motion.div 
+                variants={pageVariants} 
+                initial="initial" 
+                animate="animate" 
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
                 <Dashboard user={user} setUser={setUser} />
               </motion.div>
             ) : <Navigate to="/login" replace />
@@ -91,18 +109,8 @@ export default function App() {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  // Scroll to top on every route change
-  const ScrollToTop = () => {
-    const { pathname } = useLocation();
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [pathname]);
-    return null;
-  };
-
   return (
     <Router>
-      <ScrollToTop />
       <AnimatedRoutes user={user} setUser={setUser} />
     </Router>
   );
