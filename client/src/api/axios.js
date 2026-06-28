@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API = axios.create({
   // Update this URL when you deploy to Render
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL  || 'http://localhost:5000/api',
 });
 
 // Automatically add the token to headers for every request
